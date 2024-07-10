@@ -19,9 +19,9 @@ logger = build_logger("gradio_app", "gradio_web_server.log")
 
 headers = {"User-Agent": "VCoder Client"}
 
-no_change_btn = gr.Button.update()
-enable_btn = gr.Button.update(interactive=True)
-disable_btn = gr.Button.update(interactive=False)
+no_change_btn = gr.update()
+enable_btn = gr.update(interactive=True)
+disable_btn = gr.update(interactive=False)
 
 priority = {
     "vicuna-13b": "aaaaaaa",
