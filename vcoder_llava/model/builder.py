@@ -24,6 +24,8 @@ from vcoder_llava.model import *
 
 def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, load_4bit=False, device_map="auto", device="cuda"):
     kwargs = {"device_map": device_map}
+    offload_folder = "./offload_folder"
+    os.makedirs(offload_folder, exist_ok=True)
 
     if load_8bit:
         kwargs['load_in_8bit'] = True
@@ -93,19 +95,19 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             if 'vcoder_it_llava' in model_name.lower():
                 print('Loading VCoder LLaVA from base model...')
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
-                model = VCoderITLlavaLlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
+                model = VCoderITLlavaLlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs, offload_folder=offload_folder)
             elif 'vcoder_ds_llava' in model_name.lower():
                 print('Loading VCoder LLaVA from base model...')
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
-                model = VCoderDSLlavaLlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
+                model = VCoderDSLlavaLlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs, offload_folder=offload_folder)
             elif 'vcoder_llava' in model_name.lower():
                 print('Loading VCoder LLaVA from base model...')
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
-                model = VCoderLlavaLlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)                
+                model = VCoderLlavaLlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs, offload_folder=offload_folder)                
             else:
                 print('Loading LLaVA from base model...')
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
-                model = LlavaLlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
+                model = LlavaLlamaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs, offload_folder=offload_folder)
     else:
         # Load language model
         if model_base is not None:
@@ -126,7 +128,7 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
                 model = AutoModelForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, trust_remote_code=True, **kwargs)
             else:
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
-                model = AutoModelForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
+                model = AutoModelForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs, offload_folder=offload_folder)
 
     image_processor = None
 
