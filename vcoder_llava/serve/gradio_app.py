@@ -323,7 +323,7 @@ if __name__ == "__main__":
     parser.add_argument("--load-8bit", action="store_true")
     parser.add_argument("--load-4bit", action="store_true")
     parser.add_argument("--device", type=str, default="cuda")
-    parser.add_argument("--share", action="store_true")
+    parser.add_argument("--share", action="store_true",default=True)
     parser.add_argument("--moderate", action="store_true")
     parser.add_argument("--embed", action="store_true")
     parser.add_argument("--concurrency-count", type=int, default=10)
@@ -355,10 +355,10 @@ if __name__ == "__main__":
     logger.info(args)
     demo = build_demo(args.embed)
     demo.queue(
-        concurrency_count=args.concurrency_count,
         api_open=False
     ).launch(
         server_name=args.host,
         server_port=args.port,
-        share=args.share
+        share=True,
+        max_threads=args.concurrency_count,
     )
